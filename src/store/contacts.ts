@@ -16,11 +16,8 @@ configureObservablePersistence({
   },
 });
 
-// Contacts state - loaded from data.json
-export const contacts$ = observable<Contact[]>(initialContacts as Contact[]);
-
-// Setup persistence
-persistObservable(contacts$, {
+// Contacts state with persistence (initial value as fallback)
+export const contacts$ = persistObservable<Contact[]>(initialContacts as Contact[], {
   local: 'contacts',
 });
 
@@ -60,12 +57,12 @@ export const resultsCount$ = computed(() => {
 // Actions
 export const addContact = (data: ContactFormData) => {
   const newContact: Contact = {
-    id: uuid.v4(),
+    id: uuid.v4() as string,
     ...data,
   };
   const currentContacts = contacts$.get();
   if (Array.isArray(currentContacts)) {
-    contacts$.set([newContact, ...currentContacts]);
+    contacts$.set([...currentContacts, newContact]);
   } else {
     contacts$.set([newContact]);
   }
@@ -90,10 +87,18 @@ export const clearFilters = () => {
   filters$.set({ search: '', department: null });
 };
 
+// Clear all persisted data (use when data is corrupted)
+export const resetContacts = async () => {
+  await AsyncStorage.removeItem('contacts');
+  contacts$.set(initialContacts as Contact[]);
+};
+
 // Initialize loading state
-export const initializeStore = () => {
-  // Simulate initial loading
+export const initializeStore = async () => {
+  // TODO: Remove after first run - clears corrupted data
+  await resetContacts();
+
   setTimeout(() => {
     isLoading$.set(false);
-  }, 1000);
+  }, 5000);
 };
