@@ -1,0 +1,58 @@
+[
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440001",
+    "name": "Carlos Mendoza",
+    "email": "carlos.mendoza@empresa.com",
+    "phone": "+52 55 1234 5678",
+    "department": "Desarrollo"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440002",
+    "name": "Ana Garcia",
+    "email": "ana.garcia@empresa.com",
+    "phone": "+52 55 2345 6789",
+    "department": "Marketing"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440003",
+    "name": "Roberto Silva",
+    "email": "roberto.silva@empresa.com",
+    "phone": "+52 55 3456 7890",
+    "department": "Ventas"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440004",
+    "name": "Maria Lopez",
+    "email": "maria.lopez@empresa.com",
+    "phone": "+52 55 4567 8901",
+    "department": "Soporte"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440005",
+    "name": "Juan Martinez",
+    "email": "juan.martinez@empresa.com",
+    "phone": "+52 55 5678 9012",
+    "department": "Desarrollo"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440006",
+    "name": "Laura Fernandez",
+    "email": "laura.fernandez@empresa.com",
+    "phone": "+52 55 6789 0123",
+    "department": "Marketing"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440007",
+    "name": "Pedro Ramirez",
+    "email": "pedro.ramirez@empresa.com",
+    "phone": "+52 55 7890 1234",
+    "department": "Ventas"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440008",
+    "name": "Sofia Torres",
+    "email": "sofia.torres@empresa.com",
+    "phone": "+52 55 8901 2345",
+    "department": "Soporte"
+  }
+]
