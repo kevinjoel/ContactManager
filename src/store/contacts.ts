@@ -65,7 +65,7 @@ export const addContact = (data: ContactFormData) => {
   };
   const currentContacts = contacts$.get();
   if (Array.isArray(currentContacts)) {
-    contacts$.set([...currentContacts, newContact]);
+    contacts$.set([newContact, ...currentContacts]);
   } else {
     contacts$.set([newContact]);
   }

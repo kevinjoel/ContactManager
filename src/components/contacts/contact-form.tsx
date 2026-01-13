@@ -1,8 +1,8 @@
 import { ThemedText } from "@/components/themed-text";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { DEPARTMENTS, type ContactFormData } from "@/types/contact";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import * as yup from "yup";
@@ -47,6 +47,7 @@ export function ContactForm({
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors, isValid },
   } = useForm<ContactFormData>({
     resolver: yupResolver(schema),
@@ -58,6 +59,11 @@ export function ContactForm({
       department: undefined,
     },
   });
+
+  const handleFormSubmit = (data: ContactFormData) => {
+    onSubmit(data);
+    reset();
+  };
 
   return (
     <BottomSheetScrollView style={styles.container} keyboardShouldPersistTaps="handled">
@@ -209,7 +215,7 @@ export function ContactForm({
             styles.submitButton,
             { backgroundColor: isValid ? tintColor : "#9CA3AF" },
           ]}
-          onPress={handleSubmit(onSubmit)}
+          onPress={handleSubmit(handleFormSubmit)}
           disabled={!isValid}
         >
           <ThemedText style={styles.submitButtonText}>Guardar</ThemedText>
@@ -241,7 +247,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 16,
-    borderWidth: 2,
   },
   errorText: {
     color: "#EF4444",

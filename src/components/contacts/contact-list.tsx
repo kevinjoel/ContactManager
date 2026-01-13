@@ -1,33 +1,33 @@
-import { useCallback } from 'react';
-import { StyleSheet, View, RefreshControl } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
-import { useSelector } from '@legendapp/state/react';
+import { ThemedText } from "@/components/themed-text";
+import { useThemeColor } from "@/hooks/use-theme-color";
 import {
-  filteredContacts$,
-  resultsCount$,
-  isLoading$,
   deleteContact,
+  filteredContacts$,
   filters$,
-} from '@/store/contacts';
-import { ContactItem } from './contact-item';
-import { EmptyState } from './empty-state';
-import { SkeletonLoading } from './skeleton-loading';
-import { ThemedText } from '@/components/themed-text';
-import { useThemeColor } from '@/hooks/use-theme-color';
-import type { Contact } from '@/types/contact';
+  isLoading$,
+  resultsCount$,
+} from "@/store/contacts";
+import type { Contact } from "@/types/contact";
+import { useSelector } from "@legendapp/state/react";
+import { FlashList } from "@shopify/flash-list";
+import { useCallback } from "react";
+import { RefreshControl, StyleSheet, View } from "react-native";
+import { ContactItem } from "./contact-item";
+import { EmptyState } from "./empty-state";
+import { SkeletonLoading } from "./skeleton-loading";
 
 interface ContactListProps {
   onRefresh?: () => void;
 }
 
-export function ContactList({ onRefresh }: ContactListProps) {
+export function ContactList({ onRefresh }: Readonly<ContactListProps>) {
   const contacts = useSelector(() => filteredContacts$.get());
   const count = useSelector(() => resultsCount$.get());
   const isLoading = useSelector(() => isLoading$.get());
   const filters = useSelector(() => filters$.get());
-  const tintColor = useThemeColor({}, 'tint');
+  const tintColor = useThemeColor({}, "tint");
 
-  const isFiltered = filters.search !== '' || filters.department !== null;
+  const isFiltered = filters.search !== "" || filters.department !== null;
 
   const renderItem = useCallback(
     ({ item }: { item: Contact }) => (
@@ -38,26 +38,26 @@ export function ContactList({ onRefresh }: ContactListProps) {
 
   const keyExtractor = useCallback((item: Contact) => item.id, []);
 
-  if (isLoading) {
-    return <SkeletonLoading />;
-  }
-
-  if (contacts.length === 0) {
-    return <EmptyState isFiltered={isFiltered} />;
-  }
-
   return (
     <View style={styles.container}>
       <View style={styles.countContainer}>
         <ThemedText style={styles.countText}>
-          {count} {count === 1 ? 'contacto' : 'contactos'}
-          {isFiltered && ' encontrados'}
+          {count} {count === 1 ? "contacto" : "contactos"}
+          {isFiltered && " encontrados"}
         </ThemedText>
       </View>
       <FlashList
         data={contacts}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
+        contentContainerStyle={styles.listContent}
+        ListEmptyComponent={
+          isLoading ? (
+            <SkeletonLoading />
+          ) : (
+            <EmptyState isFiltered={isFiltered} />
+          )
+        }
         refreshControl={
           <RefreshControl
             refreshing={false}
@@ -73,6 +73,9 @@ export function ContactList({ onRefresh }: ContactListProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  listContent: {
+    paddingBottom: 20,
   },
   countContainer: {
     paddingHorizontal: 16,

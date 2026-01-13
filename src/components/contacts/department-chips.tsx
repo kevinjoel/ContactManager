@@ -1,6 +1,10 @@
 import { ThemedText } from "@/components/themed-text";
 import { useThemeColor } from "@/hooks/use-theme-color";
-import { filters$, setDepartmentFilter } from "@/store/contacts";
+import {
+  contacts$,
+  filters$,
+  setDepartmentFilter,
+} from "@/store/contacts";
 import { DEPARTMENTS, type Department } from "@/types/contact";
 import { useSelector } from "@legendapp/state/react";
 import { Pressable, ScrollView, StyleSheet } from "react-native";
@@ -14,6 +18,9 @@ const DEPARTMENT_COLORS: Record<string, string> = {
 
 export function DepartmentChips() {
   const selectedDepartment = useSelector(() => filters$.department.get());
+  const contacts = useSelector(() => contacts$.get());
+  const isEmpty = !Array.isArray(contacts) || contacts.length === 0;
+
   const tintColor = useThemeColor({}, "tint");
   const backgroundColor = useThemeColor(
     { light: "#f5f5f5", dark: "#2a2a2a" },
@@ -22,6 +29,7 @@ export function DepartmentChips() {
   const textColor = useThemeColor({}, "text");
 
   const handlePress = (dept: Department) => {
+    if (isEmpty) return;
     if (selectedDepartment === dept) {
       setDepartmentFilter(null);
     } else {
@@ -34,7 +42,7 @@ export function DepartmentChips() {
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.container}
-      style={styles.scrollView}
+      style={[styles.scrollView, isEmpty && styles.disabled]}
     >
       {DEPARTMENTS.map((dept) => {
         const isSelected = selectedDepartment === dept;
@@ -44,6 +52,7 @@ export function DepartmentChips() {
           <Pressable
             key={dept}
             onPress={() => handlePress(dept)}
+            disabled={isEmpty}
             style={[
               styles.chip,
               {
@@ -86,5 +95,8 @@ const styles = StyleSheet.create({
   chipText: {
     fontSize: 13,
     fontWeight: "500",
+  },
+  disabled: {
+    opacity: 0.5,
   },
 });
