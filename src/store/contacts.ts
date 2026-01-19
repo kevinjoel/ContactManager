@@ -69,7 +69,7 @@ export const resultsCount$ = computed(() => {
 // Actions
 export const addContact = (data: ContactFormData) => {
   const newContact: Contact = {
-    id: uuid.v4() as string,
+    id: uuid.v4(),
     ...data,
   };
   const currentContacts = contacts$.get();
