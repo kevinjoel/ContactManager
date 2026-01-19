@@ -1,10 +1,18 @@
-import initialContacts from '@/data/data.json';
-import type { Contact, ContactFormData, Department, FiltersState } from '@/types/contact';
-import { computed, observable } from '@legendapp/state';
-import { configureObservablePersistence, persistObservable } from '@legendapp/state/persist';
-import { ObservablePersistAsyncStorage } from '@legendapp/state/persist-plugins/async-storage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import uuid from 'react-native-uuid';
+import initialContacts from "@/data/data.json";
+import type {
+  Contact,
+  ContactFormData,
+  Department,
+  FiltersState,
+} from "@/types/contact";
+import { computed, observable } from "@legendapp/state";
+import {
+  configureObservablePersistence,
+  persistObservable,
+} from "@legendapp/state/persist";
+import { ObservablePersistAsyncStorage } from "@legendapp/state/persist-plugins/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import uuid from "react-native-uuid";
 
 // Configure persistence globally
 configureObservablePersistence({
@@ -17,13 +25,16 @@ configureObservablePersistence({
 });
 
 // Contacts state with persistence (initial value as fallback)
-export const contacts$ = persistObservable<Contact[]>(initialContacts as Contact[], {
-  local: 'contacts',
-});
+export const contacts$ = persistObservable<Contact[]>(
+  initialContacts as Contact[],
+  {
+    local: "contacts",
+  },
+);
 
 // Filters state (reactive)
 export const filters$ = observable<FiltersState>({
-  search: '',
+  search: "",
   department: null,
 });
 
@@ -39,11 +50,12 @@ export const filteredContacts$ = computed(() => {
 
   return contacts.filter((contact) => {
     const matchesSearch =
-      search === '' ||
+      search === "" ||
       contact.name.toLowerCase().includes(search.toLowerCase()) ||
       contact.email.toLowerCase().includes(search.toLowerCase());
 
-    const matchesDepartment = department === null || contact.department === department;
+    const matchesDepartment =
+      department === null || contact.department === department;
 
     return matchesSearch && matchesDepartment;
   });
@@ -84,20 +96,17 @@ export const setDepartmentFilter = (department: Department | null) => {
 };
 
 export const clearFilters = () => {
-  filters$.set({ search: '', department: null });
+  filters$.set({ search: "", department: null });
 };
 
 // Clear all persisted data (use when data is corrupted)
 export const resetContacts = async () => {
-  await AsyncStorage.removeItem('contacts');
+  await AsyncStorage.removeItem("contacts");
   contacts$.set(initialContacts as Contact[]);
 };
 
 // Initialize loading state
 export const initializeStore = async () => {
-  // TODO: Remove after first run - clears corrupted data
-  await resetContacts();
-
   setTimeout(() => {
     isLoading$.set(false);
   }, 5000);
